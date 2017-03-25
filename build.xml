@@ -25,20 +25,16 @@
     </target>
 
     <target name="jar" depends="compile">
-        <manifestclasspath property="manifest_cp" jarfile="${jarfile}">
-            <classpath>
-                <fileset refid="libfiles"/>
-            </classpath>
-        </manifestclasspath>
         <jar destfile="${jarfile}">
             <fileset dir="${bin}"/>
             <fileset dir="${resources}"/>
             <manifest>
                 <attribute name="Main-Class" value="org.helioviewer.jhv.DataSourcesChecker"/>
-                <attribute name="Class-Path" value="${manifest_cp}"/>
+                <attribute name="Class-Path" value="."/>
                 <attribute name="version" value="1.0"/>
                 <attribute name="revision" value="0"/>
             </manifest>
+            <zipgroupfileset refid="libfiles"/>
         </jar>
     </target>
 
