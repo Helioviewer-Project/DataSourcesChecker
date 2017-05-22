@@ -7,8 +7,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.helioviewer.jhv.JHVGlobals;
-
 @SuppressWarnings("serial")
 public class DataSources {
 
@@ -89,7 +87,7 @@ public class DataSources {
 
     public static void loadSources() {
         for (String serverName : serverSettings.keySet())
-            JHVGlobals.getExecutorService().execute(new DataSourcesTask(serverName));
+            new DataSourcesTask(serverName);
     }
 
 }
