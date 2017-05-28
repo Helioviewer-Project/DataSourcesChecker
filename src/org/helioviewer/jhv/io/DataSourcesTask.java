@@ -33,7 +33,7 @@ public class DataSourcesTask implements Runnable {
             JSONObject json = JSONUtils.getJSONStream(new DownloadStream(url).getInput());
             schema.validate(json);
         } catch (Exception e) {
-            Log.error(e);
+            Log.error(url + " : " + e);
         }
     }
 
