@@ -3,6 +3,7 @@ package org.helioviewer.jhv.io;
 import java.io.InputStream;
 
 import org.everit.json.schema.Schema;
+import org.everit.json.schema.ValidationException;
 import org.everit.json.schema.loader.SchemaLoader;
 import org.helioviewer.jhv.base.DownloadStream;
 import org.helioviewer.jhv.base.FileUtils;
@@ -32,6 +33,9 @@ public class DataSourcesTask implements Runnable {
             Schema schema = schemaLoader.load().build();
             JSONObject json = JSONUtils.getJSONStream(new DownloadStream(url).getInput());
             schema.validate(json);
+        } catch (ValidationException e) {
+            Log.error(e);
+            e.getCausingExceptions().stream().map(ValidationException::getMessage).forEach(Log::error);
         } catch (Exception e) {
             Log.error(url + " : " + e);
         }
