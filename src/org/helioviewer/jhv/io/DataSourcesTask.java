@@ -34,7 +34,7 @@ public class DataSourcesTask implements Runnable {
             JSONObject json = JSONUtils.getJSONStream(new DownloadStream(url).getInput());
             schema.validate(json);
         } catch (ValidationException e) {
-            Log.error(e);
+            Log.error("Server " + url + " " + e);
             e.getCausingExceptions().stream().map(ValidationException::getMessage).forEach(Log::error);
         } catch (Exception e) {
             Log.error(url + " : " + e);
