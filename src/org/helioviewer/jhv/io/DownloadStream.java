@@ -1,4 +1,4 @@
-package org.helioviewer.jhv.base;
+package org.helioviewer.jhv.io;
 
 import java.awt.EventQueue;
 
@@ -15,7 +15,8 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.InflaterInputStream;
 
 import org.helioviewer.jhv.JHVGlobals;
-import org.helioviewer.jhv.base.logging.Log;
+import org.helioviewer.jhv.base.Regex;
+import org.helioviewer.jhv.log.Log;
 
 public class DownloadStream {
 

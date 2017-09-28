@@ -1,6 +1,6 @@
-package org.helioviewer.jhv.base.logging;
+package org.helioviewer.jhv.log;
 
-import org.helioviewer.jhv.base.time.TimeUtils;
+import org.helioviewer.jhv.time.TimeUtils;
 
 public class Log {
 

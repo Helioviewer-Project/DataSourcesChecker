@@ -1,6 +1,6 @@
-package org.helioviewer.jhv.base.time;
+package org.helioviewer.jhv.time;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 public class JHVDate implements Comparable<JHVDate> {
 
@@ -19,7 +19,7 @@ public class JHVDate implements Comparable<JHVDate> {
     }
 
     @Override
-    public int compareTo(@NotNull JHVDate dt) {
+    public int compareTo(@Nonnull JHVDate dt) {
         return milli < dt.milli ? -1 : (milli > dt.milli ? +1 : 0);
     }
 
