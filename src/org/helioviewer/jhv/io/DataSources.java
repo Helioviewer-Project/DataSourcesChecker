@@ -4,8 +4,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
+
+import org.everit.json.schema.Validator;
 
 @SuppressWarnings("serial")
 public class DataSources {
@@ -14,9 +17,9 @@ public class DataSources {
         "SOHO", "SDO", "STEREO_A", "STEREO_B", "PROBA2", "ROB-USET", "ROB-Humain", "NSO-GONG", "NSO-SOLIS", "Kanzelhoehe", "NRH", "Yohkoh", "Hinode", "TRACE"
     )));
 
-    private static final HashMap<String, HashMap<String, String>> serverSettings = new HashMap<String, HashMap<String, String>>() {
+    private static final Map<String, Map<String, String>> serverSettings = Collections.unmodifiableMap(new LinkedHashMap<String, Map<String, String>>() {
         {
-            put("ROB", new HashMap<String, String>() {
+            put("ROB", Collections.unmodifiableMap(new HashMap<String, String>() {
                 {
                     put("API.getDataSources", "http://swhv.oma.be/hv/api/?action=getDataSources&verbose=true&enable=[STEREO_A,STEREO_B,PROBA2]");
                     put("API.getJP2Image", "http://swhv.oma.be/hv/api/index.php?action=getJP2Image&");
@@ -25,8 +28,18 @@ public class DataSources {
                     put("schema", "/data/sources_v1.0.json");
                     put("availability.images", "http://swhv.oma.be/availability/images/availability/availability.html");
                 }
-            });
-            put("IAS", new HashMap<String, String>() {
+            }));
+/*          put("ROB Test", Collections.unmodifiableMap(new HashMap<String, String>() {
+                {
+                    put("API.getDataSources", "http://swhv2.oma.be:8083/index.php?action=getDataSources&verbose=true&enable=[STEREO_A,STEREO_B,PROBA2]");
+                    put("API.getJP2Image", "http://swhv2.oma.be:8083/index.php?action=getJP2Image&");
+                    put("API.getJPX", "http://swhv2.oma.be:8083/index.php?action=getJPX&");
+                    put("label", "Royal Observatory of Belgium");
+                    put("schema", "/data/sources_v1.0.json");
+                    put("availability.images", "http://swhv2.oma.be/availability/images/availability/availability.html");
+                }
+            })); */
+            put("IAS", Collections.unmodifiableMap(new HashMap<String, String>() {
                 {
                     put("API.getDataSources", "https://helioviewer-api.ias.u-psud.fr/v2/getDataSources/?verbose=true&enable=[TRACE,Hinode,Yohkoh,STEREO_A,STEREO_B,PROBA2]");
                     put("API.getJP2Image", "https://helioviewer-api.ias.u-psud.fr/v2/getJP2Image/?");
@@ -34,8 +47,17 @@ public class DataSources {
                     put("label", "Institut d'Astrophysique Spatiale");
                     put("schema", "/data/sources_v1.0.json");
                 }
-            });
-            put("GSFC", new HashMap<String, String>() {
+            }));
+/*          put("IAS Test", Collections.unmodifiableMap(new HashMap<String, String>() {
+                {
+                    put("API.getDataSources", "https://inf-helio-test-api.ias.u-psud.fr/v2/getDataSources/?verbose=true&enable=[TRACE,Hinode,Yohkoh,STEREO_A,STEREO_B,PROBA2]");
+                    put("API.getJP2Image", "https://inf-helio-test-api.ias.u-psud.fr/v2/getJP2Image/?");
+                    put("API.getJPX", "https://inf-helio-test-api.ias.u-psud.fr/v2/getJPX/?");
+                    put("label", "Institut d'Astrophysique Spatiale");
+                    put("schema", "/data/sources_v1.0.json");
+                }
+            })); */
+            put("GSFC", Collections.unmodifiableMap(new HashMap<String, String>() {
                 {
                     put("API.getDataSources", "https://api.helioviewer.org/v2/getDataSources/?verbose=true&enable=[TRACE,Hinode,Yohkoh,STEREO_A,STEREO_B,PROBA2]");
                     put("API.getJP2Image", "https://api.helioviewer.org/v2/getJP2Image/?");
@@ -43,9 +65,8 @@ public class DataSources {
                     put("label", "Goddard Space Flight Center");
                     put("schema", "/data/sources_v1.0.json");
                 }
-            });
-            /*
-            put("GSFC SCI Test", new HashMap<String, String>() {
+            }));
+/*          put("GSFC SCI Test", Collections.unmodifiableMap(new HashMap<String, String>() {
                 {
                     put("API.getDataSources", "http://helioviewer.sci.gsfc.nasa.gov/api.php?action=getDataSources&verbose=true&enable=[TRACE,Hinode,Yohkoh,STEREO_A,STEREO_B,PROBA2]");
                     put("API.getJP2Image", "http://helioviewer.sci.gsfc.nasa.gov/api.php?action=getJP2Image&");
@@ -53,8 +74,8 @@ public class DataSources {
                     put("label", "Goddard Space Flight Center SCI Test");
                     put("schema", "/data/sources_v1.0.json");
                 }
-            });
-            put("GSFC NDC Test", new HashMap<String, String>() {
+            }));
+            put("GSFC NDC Test", Collections.unmodifiableMap(new HashMap<String, String>() {
                 {
                     put("API.getDataSources", "http://gs671-heliovw7.ndc.nasa.gov/api.php?action=getDataSources&verbose=true&enable=[TRACE,Hinode,Yohkoh,STEREO_A,STEREO_B,PROBA2]");
                     put("API.getJP2Image", "http://gs671-heliovw7.ndc.nasa.gov/api.php?action=getJP2Image&");
@@ -62,8 +83,8 @@ public class DataSources {
                     put("label", "Goddard Space Flight Center NDC Test");
                     put("schema", "/data/sources_v1.0.json");
                 }
-            });
-            put("LOCALHOST", new HashMap<String, String>() {
+            })); */
+/*          put("LOCALHOST", Collections.unmodifiableMap(new HashMap<String, String>() {
                 {
                     put("API.getDataSources", "http://localhost:8080/helioviewer/api/?action=getDataSources&verbose=true&enable=[STEREO_A,STEREO_B,PROBA2]");
                     put("API.getJP2Image", "http://localhost:8080/helioviewer/api/index.php?action=getJP2Image&");
@@ -71,10 +92,9 @@ public class DataSources {
                     put("schema", "/data/sources_v1.0.json");
                     put("label", "Localhost");
                 }
-            });
-             */
+            })); */
         }
-    };
+    });
 
     public static Set<String> getServers() {
         return serverSettings.keySet();
@@ -86,8 +106,9 @@ public class DataSources {
     }
 
     public static void loadSources() {
+        Validator validator = Validator.builder().failEarly().build();
         for (String serverName : serverSettings.keySet())
-            new DataSourcesTask(serverName);
+            new DataSourcesTask(serverName, validator);
     }
 
 }

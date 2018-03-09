@@ -2,22 +2,23 @@ package org.helioviewer.jhv.io;
 
 import java.io.InputStream;
 
-import org.everit.json.schema.Schema;
-import org.everit.json.schema.ValidationException;
-import org.everit.json.schema.loader.SchemaLoader;
-import org.helioviewer.jhv.base.FileUtils;
-import org.helioviewer.jhv.base.JSONUtils;
 import org.helioviewer.jhv.log.Log;
 import org.helioviewer.jhv.time.TimeUtils;
+
+import org.everit.json.schema.Schema;
+import org.everit.json.schema.Validator;
+import org.everit.json.schema.ValidationException;
+import org.everit.json.schema.loader.SchemaLoader;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
 public class DataSourcesTask implements Runnable {
 
+    private final Validator validator;
     private final String url;
     private final String schemaName;
 
-    public DataSourcesTask(String server) {
+    public DataSourcesTask(String server, Validator _validator) {
+        validator = _validator;
         url = DataSources.getServerSetting(server, "API.getDataSources");
         schemaName = DataSources.getServerSetting(server, "schema");
         Thread t = new Thread(this, server);
@@ -26,12 +27,13 @@ public class DataSourcesTask implements Runnable {
 
     @Override
     public void run() {
-        try (InputStream is = FileUtils.getResourceInputStream(schemaName)) {
-            JSONObject rawSchema = new JSONObject(new JSONTokener(is));
+        try (InputStream is = FileUtils.getResource(schemaName)) {
+            JSONObject rawSchema = JSONUtils.get(is);
             SchemaLoader schemaLoader = SchemaLoader.builder().schemaJson(rawSchema).addFormatValidator(new TimeUtils.SQLDateTimeFormatValidator()).build();
             Schema schema = schemaLoader.load().build();
-            JSONObject json = JSONUtils.getJSONStream(new DownloadStream(url).getInput());
-            schema.validate(json);
+
+            JSONObject jo = JSONUtils.get(url);
+            validator.performValidation(schema, jo);
         } catch (ValidationException e) {
             Log.error("Server " + url + " " + e);
             e.getCausingExceptions().stream().map(ValidationException::getMessage).forEach(Log::error);

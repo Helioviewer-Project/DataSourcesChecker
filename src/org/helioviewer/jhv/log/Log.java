@@ -8,6 +8,10 @@ public class Log {
         return TimeUtils.format(System.currentTimeMillis()) + " [" + Thread.currentThread().getName() + "] " + s;
     }
 
+    public static void info(Object obj) {
+        System.err.println(format("INFO " + obj.toString()));
+    }
+
     public static void warn(Object obj) {
         System.err.println(format("WARN " + obj.toString()));
     }

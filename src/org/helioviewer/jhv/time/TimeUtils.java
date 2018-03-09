@@ -10,6 +10,7 @@ import java.time.format.DateTimeParseException;
 import java.util.Optional;
 
 import org.everit.json.schema.FormatValidator;
+//import org.ocpsoft.prettytime.nlp.PrettyTimeParser;
 
 public class TimeUtils {
 
@@ -17,12 +18,36 @@ public class TimeUtils {
     private static final DateTimeFormatter sqlFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private static final DateTimeFormatter fileFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH.mm.ss");
 
+//  private static final PrettyTimeParser prettyParser = new PrettyTimeParser();
+
     public static final long DAY_IN_MILLIS = 86400000;
     public static final long MINUTE_IN_MILLIS = 60000;
 
-    public static final JHVDate EPOCH = new JHVDate("2000-01-01T00:00:00");
+    public static final JHVDate START = new JHVDate(floorSec(System.currentTimeMillis()));
     public static final JHVDate MINIMAL_DATE = new JHVDate("1970-01-01T00:00:00");
     public static final JHVDate MAXIMAL_DATE = new JHVDate("2050-01-01T00:00:00");
+
+    private static final double MAX_FRAMES = 97;
+
+    public static int defaultCadence(long start, long end) {
+        return (int) Math.max(1, (end - start) / MAX_FRAMES / 1000);
+    }
+
+    public static long floorSec(long milli) {
+        return (milli / 1000L) * 1000L;
+    }
+
+    public static long roundSec(long milli) {
+        return ((milli + 500L) / 1000L) * 1000L;
+    }
+
+    public static long ceilSec(long milli) {
+        return ((milli + 999L) / 1000L) * 1000L;
+    }
+
+    public static long floorDay(long milli) {
+        return milli - milli % DAY_IN_MILLIS;
+    }
 
     public static String format(long milli) {
         return DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(Instant.ofEpochMilli(milli).atOffset(ZERO));
@@ -63,11 +88,19 @@ public class TimeUtils {
     public static long parseTime(String date) {
         return LocalTime.parse(date, DateTimeFormatter.ISO_LOCAL_TIME).toSecondOfDay() * 1000L;
     }
-
+/*
+    public static long optParse(String date, long alt) {
+        try {
+            return roundSec(prettyParser.parse(date).get(0).getTime());
+        } catch (Exception e) {
+            return alt;
+        }
+    }
+*/
     public static class SQLDateTimeFormatValidator implements FormatValidator {
 
         @Override
-        public Optional<String> validate(final String subject) {
+        public Optional<String> validate(String subject) {
             try {
                 long time = parseSQL(subject);
                 if (time < MINIMAL_DATE.milli || time > MAXIMAL_DATE.milli)
