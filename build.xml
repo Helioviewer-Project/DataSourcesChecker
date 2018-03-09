@@ -6,7 +6,7 @@
     <property name="jarfile" location= "DataSourcesChecker.jar"/>
 
     <fileset id="libfiles" dir="./">
-        <include name="lib/*.jar"/>
+        <include name="lib/**/*.jar"/>
     </fileset>
 
     <target name="clean">
