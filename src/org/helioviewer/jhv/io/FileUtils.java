@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.concurrent.atomic.AtomicLong;
 
 import okio.Okio;
 import okio.BufferedSource;
@@ -27,6 +28,19 @@ public class FileUtils {
         try (BufferedSource buffer = Okio.buffer(Okio.source(is))) {
             return buffer.readString(StandardCharsets.UTF_8);
         }
+    }
+
+    public static long diskUsage(File dir) throws IOException {
+        AtomicLong size = new AtomicLong(0);
+
+        Files.walkFileTree(dir.toPath(), new SimpleFileVisitor<Path>() {
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
+                size.addAndGet(attrs.size());
+                return FileVisitResult.CONTINUE;
+            }
+        });
+        return size.get();
     }
 
     private static final SimpleFileVisitor<Path> nukeVisitor = new SimpleFileVisitor<Path>() {
@@ -57,22 +71,23 @@ public class FileUtils {
         Files.walkFileTree(dir.toPath(), nukeVisitor);
     }
 
+    private static final String lockSuffix = ".lck";
+
     public static File tempDir(File parent, String name) throws IOException {
-        String suffix = ".lock";
         // delete all directories without a lock file
-        FileFilter filter = p -> p.getName().startsWith(name) && !p.getName().endsWith(suffix);
+        FileFilter filter = p -> p.getName().startsWith(name) && !p.getName().endsWith(lockSuffix);
         File[] dirs = parent.listFiles(filter);
         if (dirs == null)
             throw new IOException("I/O error or not a directory: " + parent);
 
         for (File dir : dirs) {
-            if (new File(dir + suffix).exists())
+            if (new File(dir + lockSuffix).exists())
                 continue;
             deleteDir(dir);
         }
 
         File tempDir = Files.createTempDirectory(parent.toPath(), name).toFile();
-        File lock = new File(tempDir + suffix);
+        File lock = new File(tempDir + lockSuffix);
         lock.createNewFile();
         lock.deleteOnExit();
 

@@ -25,7 +25,7 @@ public class JSONUtils {
         }
     }
 
-    public static JSONObject get(Reader in) {
+    public static JSONObject get(Reader in) throws JSONException {
         return new JSONObject(new JSONTokener(in));
     }
 
@@ -42,7 +42,7 @@ public class JSONUtils {
     }
 
     public static ByteArrayOutputStream compressJSON(JSONObject json) throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(BUFSIZ);
         try (GZIPOutputStream gz = new GZIPOutputStream(baos, BUFSIZ);
              OutputStreamWriter out = new OutputStreamWriter(gz, StandardCharsets.UTF_8)) {
             json.write(out);

@@ -8,13 +8,18 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import org.helioviewer.jhv.JHVGlobals;
+
 import org.everit.json.schema.Validator;
 
 @SuppressWarnings("serial")
 public class DataSources {
 
     static final Set<String> SupportedObservatories = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
-        "SOHO", "SDO", "STEREO_A", "STEREO_B", "PROBA2", "ROB-USET", "ROB-Humain", "NSO-GONG", "NSO-SOLIS", "Kanzelhoehe", "NRH", "Yohkoh", "Hinode", "TRACE"
+            "SOHO", "SDO", "STEREO_A", "STEREO_B", "PROBA2", "ROB-USET", "ROB-Humain", "NSO-GONG", "NSO-SOLIS", "Kanzelhoehe", "NRH", "Yohkoh", "Hinode", "TRACE"
     )));
 
     private static final Map<String, Map<String, String>> serverSettings = Collections.unmodifiableMap(new LinkedHashMap<String, Map<String, String>>() {
@@ -100,7 +105,8 @@ public class DataSources {
         return serverSettings.keySet();
     }
 
-    public static String getServerSetting(String server, String setting) {
+    @Nullable
+    public static String getServerSetting(@Nonnull String server, @Nonnull String setting) {
         Map<String, String> settings = serverSettings.get(server);
         return settings == null ? null : settings.get(setting);
     }
